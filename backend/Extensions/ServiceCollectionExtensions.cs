@@ -148,7 +148,7 @@ public static class ServiceCollectionExtensions
         services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend", policy =>
-                policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://54.82.107.87:3000")
+                policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://100.31.160.208:3000")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials());
