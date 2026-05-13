@@ -36,6 +36,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Copy docker-compose to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ec2-user
+          key: ${{ secrets.AWS_SSH_KEY }}
+          source: "docker-compose.prod.yml"
+          target: "/home/ec2-user/app"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -44,5 +53,6 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
             cd /home/ec2-user/app
+            mv docker-compose.prod.yml docker-compose.yml
             docker-compose pull
             docker-compose up -d

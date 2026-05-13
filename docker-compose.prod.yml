@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  backend:
+    image: itsamil/hotel-backend:latest
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Hotel_DB;User Id=sa;Password=YourStrong!Passw0rd;Encrypt=True;TrustServerCertificate=True;"
+      Jwt__Key: "aVeryLongSuperSecretKeyForJwtToken123!"
+      Jwt__Issuer: "hotel-api"
+      Jwt__Audience: "hotel-client"
+      Cloudinary__CloudName: "dold456et"
+      Cloudinary__ApiKey: "859174461675359"
+      Cloudinary__ApiSecret: "MRUqpvlqAvqfz_s4fzVnqC_LCm0"
+      Seed__AdminEmail: "admin@local"
+      Seed__AdminPassword: "Admin123!"
+
+  frontend:
+    image: itsamil/hotel-frontend:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mssql_data:
