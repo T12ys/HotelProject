@@ -2,7 +2,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      SA_PASSWORD: "${SA_PASSWORD}"
       ACCEPT_EULA: "Y"
     volumes:
       - mssql_data:/var/opt/mssql
@@ -14,15 +14,15 @@ services:
     depends_on:
       - db
     environment:
-      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Hotel_DB;User Id=sa;Password=YourStrong!Passw0rd;Encrypt=True;TrustServerCertificate=True;"
-      Jwt__Key: "aVeryLongSuperSecretKeyForJwtToken123!"
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=Hotel_DB;User Id=sa;Password=${SA_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      Jwt__Key: "${JWT_KEY}"
       Jwt__Issuer: "hotel-api"
       Jwt__Audience: "hotel-client"
-      Cloudinary__CloudName: "dold456et"
-      Cloudinary__ApiKey: "859174461675359"
-      Cloudinary__ApiSecret: "MRUqpvlqAvqfz_s4fzVnqC_LCm0"
-      Seed__AdminEmail: "admin@local"
-      Seed__AdminPassword: "Admin123!"
+      Cloudinary__CloudName: "${CLOUDINARY_CLOUD_NAME}"
+      Cloudinary__ApiKey: "${CLOUDINARY_API_KEY}"
+      Cloudinary__ApiSecret: "${CLOUDINARY_API_SECRET}"
+      Seed__AdminEmail: "${SEED_ADMIN_EMAIL}"
+      Seed__AdminPassword: "${SEED_ADMIN_PASSWORD}"
 
   frontend:
     image: itsamil/hotel-frontend:latest
