@@ -51,16 +51,17 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ec2-user
           key: ${{ secrets.AWS_SSH_KEY }}
-          envs: SA_PASSWORD,JWT_KEY,CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET,SEED_ADMIN_EMAIL,SEED_ADMIN_PASSWORD
           script: |
             cd /home/ec2-user/app
             mv docker-compose.prod.yml docker-compose.yml
-            export SA_PASSWORD=$SA_PASSWORD
-            export JWT_KEY=$JWT_KEY
-            export CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
-            export CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
-            export CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
-            export SEED_ADMIN_EMAIL=$SEED_ADMIN_EMAIL
-            export SEED_ADMIN_PASSWORD=$SEED_ADMIN_PASSWORD
+            cat > .env << 'EOF'
+            SA_PASSWORD=${{ secrets.SA_PASSWORD }}
+            JWT_KEY=${{ secrets.JWT_KEY }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+            SEED_ADMIN_EMAIL=${{ secrets.SEED_ADMIN_EMAIL }}
+            SEED_ADMIN_PASSWORD=${{ secrets.SEED_ADMIN_PASSWORD }}
+            EOF
             docker-compose pull
             docker-compose up -d
